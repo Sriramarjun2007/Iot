@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: iotbench
+    env: node
+    plan: starter
+    branch: main
+    buildCommand: cd backend && npm install
+    startCommand: npm start
+    envVars: []
