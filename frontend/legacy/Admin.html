@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — IoTBench</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="Style.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap navrow">
+    <a class="brand" href="index.html"><span class="dot"></span>IoTBench</a>
+    <nav class="links">
+      <a href="index.html">Home</a>
+      <a href="projects.html">Projects</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <a class="btn copper small" href="projects.html">Browse Projects</a>
+  </div>
+</header>
+
+<main>
+  <section class="wrap" style="padding-top:36px;" id="adminSection"></section>
+</main>
+
+<!-- Apply-project modal (add/edit) -->
+<div class="overlay hide" id="projOverlay">
+  <div class="modal" style="max-width:640px;">
+    <button class="close" id="closeProjBtn">✕</button>
+    <div class="eyebrow" id="projFormEyebrow">Project</div>
+    <h2 style="font-size:22px;margin-bottom:18px;" id="projFormTitle">New project</h2>
+    <form id="projForm">
+      <div class="field"><label>Title</label><input required id="pf_title"></div>
+      <div class="field-row">
+        <div class="field"><label>Category</label><input required id="pf_category" placeholder="e.g. ESP32 / WiFi"></div>
+        <div class="field"><label>Difficulty</label>
+          <select id="pf_difficulty"><option>Beginner</option><option>Intermediate</option><option>Advanced</option></select>
+        </div>
+      </div>
+      <div class="field"><label>Price (₹)</label><input required type="number" min="0" id="pf_price"></div>
+      <div class="field"><label>Short description</label><textarea required id="pf_desc" rows="2"></textarea></div>
+      <div class="field-row">
+        <div class="field"><label>Device</label><input id="pf_device" placeholder="e.g. ESP32 Dev Board"></div>
+        <div class="field"><label>Similar to product</label><input id="pf_similar" placeholder="e.g. Smart watering kit"></div>
+      </div>
+      <div class="field"><label>Components (one per line)</label><textarea id="pf_components" rows="3"></textarea></div>
+      <div class="field"><label>What's included (one per line)</label><textarea id="pf_includes" rows="3"></textarea></div>
+      <div class="field"><label><input type="checkbox" id="pf_featured" style="width:auto;display:inline-block;margin-right:6px;">Feature on homepage</label></div>
+      <button class="btn copper" style="width:100%;justify-content:center;" type="submit">Save project</button>
+    </form>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-row">
+      <span>© 2026 IoTBench. Built for students, by builders.</span>
+      <span><a href="contact.html">Contact</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="Data.js"></script>
+<script>
+let adminTab = "applications";
+let editingProjectId = null;
+let adminSession = false;
+
+(function(){
+  const params = new URLSearchParams(window.location.search);
+  if(params.get('auth') === '1'){
+    adminSession = true;
+    if(window.history.replaceState){
+      window.history.replaceState(null, '', window.location.pathname);
+    }
+  }
+})();
+
+function isAuthed(){ return adminSession; }
+
+if(!isAuthed()){
+  window.location.href = 'admin-login.html';
+}
+
+async function renderAdmin(){
+  const section = document.getElementById('adminSection');
+  const projects = await getProjects();
+  const applications = await getApplications();
+  const weekAgo = Date.now() - 1000*60*60*24*7;
+  const newThisWeek = applications.filter(a=>a.createdAt>weekAgo).length;
+
+  section.innerHTML = `
+    <div class="notice">This demo stores admin data in your browser's local storage — visible only on this device. Change the demo password in js/data.js before sharing the site, and see the note at the bottom of that file about moving to a real shared backend.</div>
+    <div class="sec-head">
+      <h2>Admin dashboard</h2>
+      <button class="btn small secondary" id="logoutBtn">Log out</button>
+    </div>
+    <div class="kpi-row">
+      <div class="kpi"><b>${projects.length}</b><span>Total projects</span></div>
+      <div class="kpi"><b>${applications.length}</b><span>Total applications</span></div>
+      <div class="kpi"><b>${newThisWeek}</b><span>New this week</span></div>
+    </div>
+    <div class="admin-bar">
+      <button class="admin-tab ${adminTab==='applications'?'active':''}" data-tab="applications">Applications</button>
+      <button class="admin-tab ${adminTab==='projects'?'active':''}" data-tab="projects">Projects</button>
+    </div>
+    <div id="adminTabContent"></div>
+  `;
+
+  document.getElementById('logoutBtn').addEventListener('click', ()=>{
+    sessionStorage.removeItem('iotbench_admin'); renderAdmin();
+  });
+  document.querySelectorAll('.admin-tab').forEach(btn=>{
+    btn.addEventListener('click', ()=>{ adminTab = btn.dataset.tab; renderAdmin(); });
+  });
+
+  document.getElementById('adminTabContent').innerHTML =
+    adminTab === 'applications' ? applicationsTableHTML(applications) : projectsTableHTML(projects);
+
+  if(adminTab === 'applications'){
+    document.querySelectorAll('.status-pill').forEach(sel=>{
+      sel.addEventListener('change', async ()=>{
+        const apps = await getApplications();
+        const a = apps.find(x=>x.id===sel.dataset.id);
+        if(a){ a.status = sel.value; saveApplications(apps); renderAdmin(); }
+      });
+    });
+  }else{
+    document.getElementById('addProjectBtn').addEventListener('click', ()=>openProjectForm(null));
+    document.querySelectorAll('.editProjBtn').forEach(b=>b.addEventListener('click', ()=>openProjectForm(b.dataset.id)));
+    document.querySelectorAll('.deleteProjBtn').forEach(b=>b.addEventListener('click', async ()=>{
+      if(!confirm('Delete this project? This cannot be undone.')) return;
+      await deleteProject(b.dataset.id);
+      renderAdmin();
+    }));
+  }
+}
+
+function applicationsTableHTML(applications){
+  if(!applications.length) return `<p style="color:var(--muted);">No applications yet. They'll show up here as students apply.</p>`;
+  const rows = [...applications].sort((a,b)=>b.createdAt-a.createdAt);
+  return `<table class="admin-table"><thead><tr>
+    <th>Student</th><th>Project</th><th>College / Dept</th><th>Contact</th><th>Status</th><th>Applied</th><th></th>
+  </tr></thead><tbody>
+  ${rows.map(a=>`<tr>
+    <td><b>${esc(a.name)}</b></td>
+    <td>${esc(a.projectTitle)}</td>
+    <td>${esc(a.college)}<br><span class="mono" style="color:var(--muted);font-size:11.5px;">${esc(a.department)} · ${esc(a.year)}</span></td>
+    <td class="mono" style="font-size:12.5px;">${esc(a.phone)}<br>${esc(a.email)}</td>
+    <td><select class="status-pill status-${a.status}" data-id="${a.id}">
+      ${['New','Contacted','Confirmed','Closed'].map(s=>`<option ${s===a.status?'selected':''}>${s}</option>`).join('')}
+    </select></td>
+    <td class="mono" style="font-size:11.5px;color:var(--muted);">${timeAgo(a.createdAt)}</td>
+    <td><a class="btn small wa" href="${waLink('Hi '+a.name+', this is IoTBench regarding your application for "'+a.projectTitle+'".')}" target="_blank">WA</a></td>
+  </tr>`).join('')}
+  </tbody></table>`;
+}
+
+function projectsTableHTML(projects){
+  return `
+  <div style="display:flex;justify-content:flex-end;margin-bottom:14px;">
+    <button class="btn copper small" id="addProjectBtn">+ Add project</button>
+  </div>
+  <table class="admin-table"><thead><tr>
+    <th>Title</th><th>Category</th><th>Price</th><th>Featured</th><th>Added</th><th></th>
+  </tr></thead><tbody>
+  ${[...projects].sort((a,b)=>b.createdAt-a.createdAt).map(p=>`<tr>
+    <td><b>${esc(p.title)}</b></td>
+    <td>${esc(p.category)}</td>
+    <td class="mono">${fmt(p.price)}</td>
+    <td>${p.featured?'Yes':'—'}</td>
+    <td class="mono" style="font-size:11.5px;color:var(--muted);">${timeAgo(p.createdAt)}</td>
+    <td style="white-space:nowrap;">
+      <button class="btn small secondary editProjBtn" data-id="${p.id}">Edit</button>
+      <button class="btn small secondary deleteProjBtn" data-id="${p.id}" style="color:var(--danger);">Delete</button>
+    </td>
+  </tr>`).join('')}
+  </tbody></table>`;
+}
+
+async function openProjectForm(id){
+  editingProjectId = id;
+  document.getElementById('projFormTitle').textContent = id ? 'Edit project' : 'New project';
+  const form = document.getElementById('projForm');
+  form.reset();
+  if(id){
+    const projects = await getProjects();
+    const p = projects.find(x=>x.id===id);
+    document.getElementById('pf_title').value = p.title;
+    document.getElementById('pf_category').value = p.category;
+    document.getElementById('pf_difficulty').value = p.difficulty;
+    document.getElementById('pf_price').value = p.price;
+    document.getElementById('pf_desc').value = p.desc;
+    document.getElementById('pf_device').value = p.device || '';
+    document.getElementById('pf_similar').value = p.similarTo || '';
+    document.getElementById('pf_components').value = p.components.join('\n');
+    document.getElementById('pf_includes').value = p.includes.join('\n');
+    document.getElementById('pf_featured').checked = !!p.featured;
+  }
+  document.getElementById('projOverlay').classList.remove('hide');
+}
+
+document.getElementById('closeProjBtn').addEventListener('click', ()=>{
+  document.getElementById('projOverlay').classList.add('hide');
+});
+
+document.getElementById('projForm').addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const data = {
+    title: document.getElementById('pf_title').value,
+    category: document.getElementById('pf_category').value,
+    difficulty: document.getElementById('pf_difficulty').value,
+    price: Number(document.getElementById('pf_price').value),
+    desc: document.getElementById('pf_desc').value,
+    device: document.getElementById('pf_device').value,
+    similarTo: document.getElementById('pf_similar').value,
+    components: document.getElementById('pf_components').value.split('\n').map(s=>s.trim()).filter(Boolean),
+    includes: document.getElementById('pf_includes').value.split('\n').map(s=>s.trim()).filter(Boolean),
+    featured: document.getElementById('pf_featured').checked,
+  };
+  if(editingProjectId){
+    await updateProject(editingProjectId, data);
+  }else{
+    await createProject(data);
+  }
+  document.getElementById('projOverlay').classList.add('hide');
+  renderAdmin();
+});
+
+renderAdmin();
+</script>
+</body>
+</html>

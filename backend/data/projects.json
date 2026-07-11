@@ -1,0 +1,123 @@
+[
+  {
+    "id": "p1",
+    "title": "Smart Irrigation System",
+    "category": "ESP32 / WiFi",
+    "difficulty": "Beginner",
+    "price": 1499,
+    "desc": "Automates watering using real-time soil moisture readings, with a live dashboard.",
+    "components": [
+      "ESP32 Dev Board",
+      "Soil Moisture Sensor",
+      "Relay Module",
+      "Mini Water Pump",
+      "5V Power Supply"
+    ],
+    "includes": [
+      "Full source code",
+      "Circuit diagram",
+      "Project report (PDF)",
+      "Presentation slides",
+      "Viva Q&A prep sheet",
+      "1-on-1 setup call"
+    ],
+    "featured": true,
+    "createdAt": 1783610974945
+  },
+  {
+    "id": "p2",
+    "title": "Home Automation with Voice Control",
+    "category": "ESP32 / WiFi",
+    "difficulty": "Intermediate",
+    "price": 1799,
+    "desc": "Control lights and appliances by voice or app, from anywhere with an internet connection.",
+    "components": [
+      "ESP8266/ESP32",
+      "4-Channel Relay",
+      "Google Assistant / Alexa integration",
+      "Mobile app (Blynk)"
+    ],
+    "includes": [
+      "Full source code",
+      "Circuit diagram",
+      "Project report (PDF)",
+      "Presentation slides",
+      "Viva Q&A prep sheet",
+      "1-on-1 setup call"
+    ],
+    "featured": true,
+    "createdAt": 1783265374945
+  },
+  {
+    "id": "p3",
+    "title": "Vehicle Accident Detection & Alert",
+    "category": "Sensors & Automation",
+    "difficulty": "Advanced",
+    "price": 2199,
+    "desc": "Detects a crash using an accelerometer and instantly sends GPS location via SMS to emergency contacts.",
+    "components": [
+      "Arduino Uno",
+      "GPS Module (NEO-6M)",
+      "GSM Module (SIM800L)",
+      "MPU6050 Accelerometer"
+    ],
+    "includes": [
+      "Full source code",
+      "Circuit diagram",
+      "Project report (PDF)",
+      "Presentation slides",
+      "Viva Q&A prep sheet",
+      "1-on-1 setup call"
+    ],
+    "featured": false,
+    "createdAt": 1782228574945
+  },
+  {
+    "id": "p4",
+    "title": "Smart Attendance System (RFID)",
+    "category": "Arduino",
+    "difficulty": "Beginner",
+    "price": 1299,
+    "desc": "Marks attendance automatically when students tap an RFID card, with an exportable log.",
+    "components": [
+      "Arduino Uno",
+      "RFID Reader (RC522)",
+      "RFID Cards",
+      "16x2 LCD Display"
+    ],
+    "includes": [
+      "Full source code",
+      "Circuit diagram",
+      "Project report (PDF)",
+      "Presentation slides",
+      "Viva Q&A prep sheet",
+      "1-on-1 setup call"
+    ],
+    "featured": false,
+    "createdAt": 1781191774945
+  },
+  {
+    "id": "p5",
+    "title": "Air Quality Monitoring Dashboard",
+    "category": "ESP32 / WiFi",
+    "difficulty": "Intermediate",
+    "price": 1599,
+    "desc": "Tracks AQI, temperature and humidity, streaming live data to an online dashboard.",
+    "components": [
+      "ESP8266",
+      "MQ135 Gas Sensor",
+      "DHT11 Sensor",
+      "ThingSpeak Dashboard"
+    ],
+    "includes": [
+      "Full source code",
+      "Circuit diagram",
+      "Project report (PDF)",
+      "Presentation slides",
+      "Viva Q&A prep sheet",
+      "1-on-1 setup call"
+    ],
+    "featured": true,
+    "createdAt": 1783697374945
+  }
+]

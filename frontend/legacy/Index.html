@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IoTBench — Affordable IoT Projects for Students</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="Style.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap navrow">
+    <a class="brand" href="index.html"><span class="dot"></span>IoTBench</a>
+    <nav class="links" id="navLinks">
+      <a href="index.html" data-page="home">Home</a>
+      <a href="projects.html" data-page="projects">Projects</a>
+      <a href="about.html" data-page="about">About</a>
+      <a href="contact.html" data-page="contact">Contact</a>
+      <a href="admin-login.html" data-page="admin">Admin</a>
+    </nav>
+    <a class="btn copper small" href="projects.html">Browse Projects</a>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <div class="eyebrow">Affordable · Guided · Viva-ready</div>
+        <h1>Build a real <span>IoT project</span>.<br>Walk into your viva ready.</h1>
+        <p class="lead">Pre-built, well-documented IoT mini and major projects for engineering &amp; diploma students — complete with code, circuit diagrams, reports and 1-on-1 support.</p>
+        <div class="cta-row">
+          <a class="btn copper" href="projects.html">Browse Projects</a>
+          <a class="btn wa" id="heroWA" href="#" target="_blank">Chat on WhatsApp</a>
+        </div>
+        <div class="stat-strip">
+          <div class="stat"><b id="statCount">5+</b><span>Ready-made projects</span></div>
+          <div class="stat"><b>500+</b><span>Students helped</span></div>
+          <div class="stat"><b>1:1</b><span>Viva support call</span></div>
+        </div>
+      </div>
+      <div class="hero-panel">
+        <div class="pinrow"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <h4>Recently added</h4>
+        <div id="recentList"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap">
+    <svg width="100%" height="28" viewBox="0 0 600 28" preserveAspectRatio="none" style="display:block;margin:10px 0 30px;">
+      <path class="trace" d="M0,14 L180,14 L200,4 L420,4 L440,14 L600,14"/>
+      <circle class="via" cx="200" cy="4" r="3"/><circle class="via" cx="440" cy="14" r="3"/>
+    </svg>
+    <div class="sec-head">
+      <h2>Featured projects</h2>
+      <a href="projects.html" class="mono" style="font-size:13px;color:var(--teal);">View all →</a>
+    </div>
+    <div class="grid" id="featuredGrid"></div>
+  </section>
+
+  <section class="wrap">
+    <div class="sec-head"><h2>How it works</h2></div>
+    <div class="grid" style="grid-template-columns:repeat(4,1fr);">
+      <div class="card"><div class="card-body">
+        <div class="mono" style="color:var(--copper);font-size:13px;margin-bottom:8px;">01</div>
+        <h3>Pick a project</h3><p class="desc">Browse by category, budget or difficulty.</p>
+      </div></div>
+      <div class="card"><div class="card-body">
+        <div class="mono" style="color:var(--copper);font-size:13px;margin-bottom:8px;">02</div>
+        <h3>Apply in 2 minutes</h3><p class="desc">Tell us your details — we confirm on WhatsApp.</p>
+      </div></div>
+      <div class="card"><div class="card-body">
+        <div class="mono" style="color:var(--copper);font-size:13px;margin-bottom:8px;">03</div>
+        <h3>Get everything</h3><p class="desc">Code, diagram, report, PPT — delivered digitally.</p>
+      </div></div>
+      <div class="card"><div class="card-body">
+        <div class="mono" style="color:var(--copper);font-size:13px;margin-bottom:8px;">04</div>
+        <h3>Ace your viva</h3><p class="desc">We prep you with likely questions and a support call.</p>
+      </div></div>
+    </div>
+  </section>
+
+  <section class="wrap">
+    <div class="sec-head"><h2>What students say</h2></div>
+    <div class="grid">
+      <div class="testi">"Got my circuit diagram, code and report a day before submission and it just worked. Viva questions they gave me came up almost exactly."<div class="who">— B.Tech ECE, Final Year</div></div>
+      <div class="testi">"Cheapest option I found that actually explained the code instead of just dumping a zip file."<div class="who">— Diploma, EEE</div></div>
+      <div class="testi">"WhatsApp support genuinely responded fast, even the night before my viva."<div class="who">— B.E. CSE, 3rd Year</div></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-row">
+      <span>© 2026 IoTBench. Built for students, by builders.</span>
+      <span><a href="contact.html">Contact</a> · <a href="admin-login.html" style="opacity:.6;">Admin</a></span>
+    </div>
+  </div>
+</footer>
+
+<a class="fab" id="fabWA" href="#" target="_blank" title="Chat on WhatsApp">
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M17.5 14.4c-.3-.1-1.7-.9-2-.9-.3-.1-.5-.1-.7.1-.2.3-.8.9-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.5-2.3-1.5-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5C10 9 9.5 7.8 9.3 7.3c-.2-.5-.4-.4-.5-.4h-.5c-.2 0-.5.1-.7.3-.2.3-1 1-1 2.4s1 2.8 1.1 3c.1.2 2 3.1 4.9 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.3.2-.7.2-1.2.2-1.3-.1-.2-.3-.3-.6-.4z"/><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2zm0 18.2c-1.6 0-3.2-.4-4.5-1.2l-.3-.2-3.1.8.8-3-.2-.3A8.2 8.2 0 1 1 12 20.2z"/></svg>
+</a>
+
+<script src="Data.js"></script>
+<script>
+  initShell('home');
+  document.getElementById('heroWA').href = waLink('Hi! I want to know more about IoTBench projects.');
+
+  function cardHTML(p){
+    const isNew = (Date.now()-p.createdAt) < 1000*60*60*24*7;
+    return `<div class="card">
+      <div class="pins"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="card-body">
+        <div class="tag-row"><span class="tag">${esc(p.category)}</span><span class="tag">${esc(p.difficulty)}</span>${isNew?'<span class="tag new">New</span>':''}</div>
+        <h3>${esc(p.title)}</h3>
+        <p class="desc">${esc(p.desc)}</p>
+        <div class="card-foot">
+          <span class="price">${fmt(p.price)}</span>
+          <a class="btn small secondary" href="project.html?id=${p.id}">View →</a>
+        </div>
+      </div>
+    </div>`;
+  }
+  (async function(){
+    try {
+      const projects = await getProjects();
+      document.getElementById('statCount').textContent = projects.length + '+';
+
+      const recent = [...projects].sort((a,b)=>b.createdAt-a.createdAt).slice(0,4);
+      document.getElementById('recentList').innerHTML = recent.map(p => `
+        <div class="mini-card">
+          <a href="project.html?id=${p.id}"><b>${esc(p.title)}</b><br><span style="color:var(--muted);font-size:12px;">${esc(p.category)}</span></a>
+          <span class="price">${fmt(p.price)}</span>
+        </div>`).join('');
+
+      const featured = projects.filter(p=>p.featured).slice(0,3);
+      document.getElementById('featuredGrid').innerHTML = featured.map(cardHTML).join('');
+    } catch(err) {
+      console.error(err);
+      document.getElementById('featuredGrid').innerHTML = '<p style="color:var(--muted);">Unable to load featured projects.</p>';
+    }
+  })();
+</script>
+</body>
+</html>

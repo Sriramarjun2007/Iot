@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Sign In — IoTBench</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="Style.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap navrow">
+    <a class="brand" href="index.html"><span class="dot"></span>IoTBench</a>
+    <nav class="links">
+      <a href="index.html" data-page="home">Home</a>
+      <a href="projects.html" data-page="projects">Projects</a>
+      <a href="about.html" data-page="about">About</a>
+      <a href="contact.html" data-page="contact">Contact</a>
+      <a href="admin.html" data-page="admin">Admin</a>
+    </nav>
+    <a class="btn copper small" href="projects.html">Browse Projects</a>
+  </div>
+</header>
+
+<main>
+  <section class="wrap" style="padding-top:36px;">
+    <div class="admin-login-box">
+      <div class="eyebrow">Admin</div>
+      <h2 style="font-size:22px;margin-bottom:18px;">Sign in</h2>
+      <div class="field"><label>Password</label><input type="password" id="adminPw"></div>
+      <button class="btn copper" style="width:100%;justify-content:center;" id="loginBtn">Sign in</button>
+      <p id="adminErr" style="color:var(--danger);font-size:12.5px;margin-top:10px;"></p>
+      <p style="font-size:11.5px;color:var(--muted);margin-top:18px;">For this demo, admin authentication runs entirely in the browser. Do not rely on it for production without a proper backend login.</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-row">
+      <span>© 2026 IoTBench. Built for students, by builders.</span>
+      <span><a href="contact.html">Contact</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="Data.js"></script>
+<script>
+  function isAuthed(){ return false; }
+  document.getElementById('loginBtn').addEventListener('click', ()=>{
+    const pw = document.getElementById('adminPw').value;
+    if(pw === ADMIN_PASSWORD){
+      window.location.href = 'Admin.html?auth=1';
+    } else {
+      document.getElementById('adminErr').textContent = 'Incorrect password.';
+    }
+  });
+  document.getElementById('adminPw').addEventListener('keydown', (e)=>{
+    if(e.key === 'Enter') document.getElementById('loginBtn').click();
+  });
+</script>
+</body>
+</html>

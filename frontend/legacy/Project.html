@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project Details — IoTBench</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="Style.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap navrow">
+    <a class="brand" href="index.html"><span class="dot"></span>IoTBench</a>
+    <nav class="links">
+      <a href="index.html" data-page="home">Home</a>
+      <a href="projects.html" data-page="projects">Projects</a>
+      <a href="about.html" data-page="about">About</a>
+      <a href="contact.html" data-page="contact">Contact</a>
+      <a href="admin-login.html" data-page="admin">Admin</a>
+    </nav>
+    <a class="btn copper small" href="projects.html">Browse Projects</a>
+  </div>
+</header>
+
+<main>
+  <section class="wrap" style="padding-top:40px;" id="detailSection">
+    <!-- filled by JS -->
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-row">
+      <span>© 2026 IoTBench. Built for students, by builders.</span>
+      <span><a href="contact.html">Contact</a> · <a href="admin-login.html" style="opacity:.6;">Admin</a></span>
+    </div>
+  </div>
+</footer>
+
+<a class="fab" id="fabWA" href="#" target="_blank" title="Chat on WhatsApp">
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M17.5 14.4c-.3-.1-1.7-.9-2-.9-.3-.1-.5-.1-.7.1-.2.3-.8.9-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.5-2.3-1.5-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5C10 9 9.5 7.8 9.3 7.3c-.2-.5-.4-.4-.5-.4h-.5c-.2 0-.5.1-.7.3-.2.3-1 1-1 2.4s1 2.8 1.1 3c.1.2 2 3.1 4.9 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.3.2-.7.2-1.2.2-1.3-.1-.2-.3-.3-.6-.4z"/><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2zm0 18.2c-1.6 0-3.2-.4-4.5-1.2l-.3-.2-3.1.8.8-3-.2-.3A8.2 8.2 0 1 1 12 20.2z"/></svg>
+</a>
+
+<!-- Apply modal -->
+<div class="overlay hide" id="applyOverlay">
+  <div class="modal">
+    <button class="close" id="closeModalBtn">✕</button>
+    <div class="eyebrow">Apply</div>
+    <h2 style="font-size:22px;margin-bottom:18px;" id="applyModalTitle">Apply for this project</h2>
+    <form id="applyForm">
+      <div class="field-row">
+        <div class="field"><label>Full name</label><input required id="af_name"></div>
+        <div class="field"><label>Phone</label><input required id="af_phone" pattern="[0-9+ ]{10,15}"></div>
+      </div>
+      <div class="field"><label>College / Institution</label><input required id="af_college"></div>
+      <div class="field-row">
+        <div class="field"><label>Department</label><input required id="af_dept" placeholder="e.g. ECE, CSE"></div>
+        <div class="field"><label>Year</label>
+          <select id="af_year"><option>1st Year</option><option>2nd Year</option><option>3rd Year</option><option selected>Final Year</option><option>Diploma</option></select>
+        </div>
+      </div>
+      <div class="field"><label>Email</label><input type="email" required id="af_email"></div>
+      <div class="field"><label>Message (optional)</label><textarea id="af_msg" rows="3" placeholder="Anything specific you need help with?"></textarea></div>
+      <button class="btn copper" style="width:100%;justify-content:center;" type="submit">Submit application &amp; open WhatsApp</button>
+    </form>
+  </div>
+</div>
+
+<script src="Data.js"></script>
+<script>
+  initShell('projects');
+  const section = document.getElementById('detailSection');
+
+  (async function(){
+    const project = await getProject(qs('id'));
+
+    if(!project){
+      section.innerHTML = `<p>Project not found. <a href="projects.html" style="color:var(--teal);">Back to projects</a></p>`;
+      return;
+    }
+    document.title = project.title + " — IoTBench";
+    section.innerHTML = `
+      <a href="projects.html" class="mono" style="font-size:12.5px;color:var(--muted);">← Back to all projects</a>
+      <div class="detail-grid" style="margin-top:18px;">
+        <div>
+          <div class="detail-banner">${esc(project.category)} · ${esc(project.difficulty)}</div>
+          <h1 style="font-size:30px;">${esc(project.title)}</h1>
+          <p style="color:var(--muted);margin-top:10px;">${esc(project.desc)}</p>
+          ${project.device ? `<p style="margin-top:8px;"><strong>Device:</strong> ${esc(project.device)}</p>` : ''}
+          ${project.similarTo ? `<p style="margin-top:8px;"><strong>Similar to:</strong> ${esc(project.similarTo)}</p>` : ''}
+
+          <h4 style="margin-top:28px;font-size:14px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);">Components used</h4>
+          <table class="spec-table"><tbody>
+            ${project.components.map((c,i)=>`<tr><td>Part ${String(i+1).padStart(2,'0')}</td><td>${esc(c)}</td></tr>`).join('')}
+          </tbody></table>
+
+          <h4 style="margin-top:20px;font-size:14px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);">What's included</h4>
+          <ul class="include-list">${project.includes.map(i=>`<li>${esc(i)}</li>`).join('')}</ul>
+        </div>
+        <div>
+          <div class="side-box">
+            <div class="mono" style="font-size:12px;color:var(--muted);text-transform:uppercase;">Price</div>
+            <div class="price-big">${fmt(project.price)}</div>
+            <button class="btn copper" id="applyBtn">Apply for this project</button>
+            <a class="btn wa" href="${waLink('Hi! I want to know more about "'+project.title+'" (₹'+project.price+').')}" target="_blank">Chat on WhatsApp</a>
+            <p style="font-size:12px;color:var(--muted);margin-top:14px;">Applying doesn't charge you anything — we confirm details and payment over WhatsApp.</p>
+          </div>
+        </div>
+      </div>
+    `;
+    document.getElementById('applyBtn').addEventListener('click', ()=>{
+      document.getElementById('applyModalTitle').textContent = 'Apply — ' + project.title;
+      document.getElementById('applyOverlay').classList.remove('hide');
+    });
+
+    document.getElementById('closeModalBtn').addEventListener('click', ()=>{
+      document.getElementById('applyOverlay').classList.add('hide');
+    });
+
+    document.getElementById('applyForm').addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const app = {
+        id: 'a_' + Date.now(),
+        name: document.getElementById('af_name').value,
+        phone: document.getElementById('af_phone').value,
+        college: document.getElementById('af_college').value,
+        department: document.getElementById('af_dept').value,
+        year: document.getElementById('af_year').value,
+        email: document.getElementById('af_email').value,
+        message: document.getElementById('af_msg').value,
+        projectId: project.id,
+        projectTitle: project.title,
+        status: 'New',
+        createdAt: Date.now()
+      };
+      await createApplication(app);
+      const text = `Hi! I'm ${app.name} from ${app.college}. I just applied for "${app.projectTitle}" on IoTBench and would like to proceed.`;
+      document.getElementById('applyOverlay').classList.add('hide');
+      window.open(waLink(text), '_blank');
+      alert("Application submitted! We've opened WhatsApp so you can confirm details with us directly.");
+      e.target.reset();
+    });
+  })().catch(err=>{
+    console.error(err);
+    section.innerHTML = '<p style="color:var(--muted);">Unable to load project details.</p>';
+  });
+</script>
+</body>
+</html>
